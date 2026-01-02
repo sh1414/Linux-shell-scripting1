@@ -1,35 +1,33 @@
-pipeline
-{
+pipeline {
     agent any
-    environment
-    {
-        IMAGES_NAME = "ks:${GIT-COMMIT}"
+
+    environment {
+        IMAGE_NAME = "ks:${GIT_COMMIT}"
+        CONTAINER_NAME = "ks_app"
     }
-    stages
-    {
-    stage('git-checkout')
-    {
-        steps
-        {
-            git url: 'https://github.com/sh1414/Linux-shell-scripting1.git', branch: 'main'
+
+    stages {
+
+        stage('Git Checkout') {
+            steps {
+                git url: 'https://github.com/sh1414/Linux-shell-scripting1.git',
+                    branch: 'main'
+            }
+        }
+
+        stage('Docker Build') {
+            steps {
+                sh '''
+                docker build -t ${IMAGE_NAME} .
+                '''
+            }
+        }
+        stage('Run Container') {
+            steps {
+                sh '''
+                docker run -d --name ${CONTAINER_NAME} -p 8080:8080 ${IMAGE_NAME}
+                '''
+            }
         }
     }
-    stage('build-stage')
-    {
-        steps
-        {
-            sh '''
-            docker build -t ${IMAGES_NAME} .
-            '''
-        }
-    }
-    stage('run-stage')
-    {
-        steps{
-            sh '''
-            docker run -it -d -p 8080:8080 ${IMAGES_NAME}
-            '''
-        }
-    }
-}
 }
