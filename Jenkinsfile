@@ -3,7 +3,7 @@ pipeline
     agent any
     environment
     {
-        IMAGES_NAME='ks:$(GIT-COMMIT)'
+        IMAGES_NAME='ks:${GIT-COMMIT}'
     }
     stages
     {
@@ -19,7 +19,7 @@ pipeline
         steps
         {
             sh '''
-            docker build -t $(IMAGES_NAME) .
+            docker build -t ${IMAGES_NAME} .
             '''
         }
     }
@@ -27,7 +27,7 @@ pipeline
     {
         steps{
             sh '''
-            docker run -it -d -p 8080:8080 $(IMAGES_NAME)
+            docker run -it -d -p 8080:8080 ${IMAGES_NAME}
             '''
         }
     }
