@@ -3,7 +3,7 @@ pipeline
     agent any
     environment
     {
-        IMAGES_NAME='ks:${GIT-COMMIT}'
+        IMAGES_NAME = "ks:${GIT-COMMIT}"
     }
     stages
     {
