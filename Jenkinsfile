@@ -4,6 +4,7 @@ pipeline {
     environment {
         IMAGE_NAME = "ks:${GIT_COMMIT}"
         CONTAINER_NAME = "ks_app"
+        APP_PORT = "8081"
     }
 
     stages {
@@ -22,10 +23,23 @@ pipeline {
                 '''
             }
         }
+
+        stage('Stop Old Container') {
+            steps {
+                sh '''
+                docker stop ${CONTAINER_NAME} || true
+                docker rm ${CONTAINER_NAME} || true
+                '''
+            }
+        }
+
         stage('Run Container') {
             steps {
                 sh '''
-                docker run -d --name ${CONTAINER_NAME} -p 8080:8080 ${IMAGE_NAME}
+                docker run -d \
+                --name ${CONTAINER_NAME} \
+                -p ${APP_PORT}:8080 \
+                ${IMAGE_NAME}
                 '''
             }
         }
