@@ -11,7 +11,7 @@ pipeline
     {
         steps
         {
-            giturl: 'https://github.com/sh1414/Linux-shell-scripting1.git', branch: 'main'
+            git url: 'https://github.com/sh1414/Linux-shell-scripting1.git', branch: 'main'
         }
     }
     stage('build-stage')
