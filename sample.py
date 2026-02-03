@@ -1,25 +1,17 @@
-from http.server import BaseHTTPRequestHandler, HTTPServer
-import socket
+from flask import Flask
+from prometheus_client import Counter, generate_latest
 
-class Handler(BaseHTTPRequestHandler):
-    def do_GET(self):
-        hostname = socket.gethostname()
-        ip_address = socket.gethostbyname(hostname)
+app = Flask(__name__)
 
-        self.send_response(200)
-        self.send_header("Content-type", "text/html")
-        self.end_headers()
+requests = Counter('requests_total', 'Total Requests')
 
-        self.wfile.write(f"""
-        <html>
-            <body>
-                <h1>Container IP Address</h1>
-                <p>Hostname: {hostname}</p>
-                <p>IP Address: {ip_address}</p>
-            </body>
-        </html>
-        """.encode())
-server = HTTPServer(("0.0.0.0", 8080), Handler)
-print("Server running on port 8080...")
-server.serve_forever()
----hello
+@app.route("/")
+def home():
+    requests.inc()
+    return "Hello from CI/CD monitored app!"
+
+@app.route("/metrics")
+def metrics():
+    return generate_latest()
+
+app.run(host="0.0.0.0", port=5000)
