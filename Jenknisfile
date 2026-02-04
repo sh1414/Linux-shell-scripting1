@@ -3,7 +3,7 @@ pipeline{
    stages{
    stage('Gitcheckout'){
     steps{
-             git url: 'https://github.com/sh1414/Linux-shell-scripting1.git' branch:'main
+             git url: 'https://github.com/sh1414/Linux-shell-scripting1.git' branch:'main'
 }
 }
 }
